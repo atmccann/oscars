@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>    
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/colorbrewer.v1.min.js"></script>
+
+
+    <style type="text/css">
+
+        #graphic_container {
+            margin:20px auto;
+            width:1200px;
+        }
+
+    </style>
+
+  </head>
+  <body>
+
+    <div id="graphic_container"></div>
+    
+    <script type="text/javascript">
+
+   var data = [
+           {Category:"Best Picture",  movie_title:"American Hustle", value:1},
+            {Category:"Best Picture",  movie_title:"Captain Phillips", value:1},
+            {Category:"Best Picture",  movie_title:"Dallas Buyers Club", value:1},
+            {Category:"Best Picture",  movie_title:"Gravity", value:1},
+            {Category:"Best Picture",  movie_title:"Her", value:1},
+            {Category:"Best Picture",  movie_title:"Nebraska", value:1},
+            {Category:"Best Picture",  movie_title:"Philomena", value:1},
+            {Category:"Best Picture",  movie_title:"22 Years a Slave", value:1},
+            {Category:"Best Picture",  movie_title:"The Wolf of Wall Street", value:1},
+
+            {Category:"Best Actor", name:  "Christian Bale", movie_title:"American Hustle",value:2},
+            {Category:"Best Actor",  name:  "Bruce Dern",  movie_title:"Nebraska",value:2},
+            {Category:"Best Actor", name:  "Leonardo DiCaprio", movie_title:"The Wolf of Wall Street",value:2},
+            {Category:"Best Actor",  name:  "Chiwetel Ejiofor", movie_title:"22 Years a Slave",value:2},
+            {Category:"Best Actor",  name:  "Matthew McConaughey", movie_title:"Dallas Buyers Club",value:2},
+
+            {Category:"Best Actress", name:  "Amy Adams", movie_title:"American Hustle",value:2},
+            {Category:"Best Actress", name:  "Cate Blanchett", movie_title:"Blue Jasmine", value:2},
+            {Category:"Best Actress", name:  "Sandra Bullock", movie_title: "Gravity", value:2},
+            {Category:"Best Actress", name:  "Judi Dench", movie_title: "Philomena", value:2},
+            {Category:"Best Actress", name:  "Meryl Streep", movie_title:"August: Osage County", value:2},
+
+
+            {Category:"Best Supporting Actor",  name: "Barkhad Abdi",  movie_title:"Captain Phillips",value:2},
+            {Category:"Best Supporting Actor",  name: "Bradley Cooper", movie_title:"American Hustle",value:2},
+            {Category:"Best Supporting Actor", name:  "Michael Fassbender", movie_title:"22 Years a Slave",value:2},
+            {Category:"Best SupportingActor", name:  "Jonah Hill", movie_title:"The Wolf of Wall Street",value:2},
+            {Category:"Best Supporting Actor", name: "Jared Leto", movie_title:"Dallas Buyers Club",value:2},
+
+            {Category:"Best Supporting Actress", name: "Sally Hawkins", movie_title:"Blue Jasmine",value:2},
+            {Category:"Best Supporting Actress", name: "Jennifer Lawrence", movie_title:"American Hustle",value:2},
+            {Category:"Best Supporting Actress", name: "Lupita Nyongo", movie_title:"22 Years a Slave",value:2},
+            {Category:"Best Supporting Actress", name: "Julia Roberts", movie_title:"August: Osage County",value:2},
+            {Category:"Best Supporting Actress", name: "June Squibb", movie_title:"Nebraska",value:2},
+
+            {Category:"Best Director",  movie_title:"American Hustle", name:"David O. Russell",value:2},
+            {Category:"Best Director",  movie_title:"Gravity", name:"Alfonso Cuarón",value:2},
+            {Category:"Best Director",  movie_title:"Nebraska", name:"Alexander Payne",value:2},
+            {Category:"Best Director",  movie_title:"22 Years a Slave", name:"Steve McQueen",value:2},
+            {Category:"Best Director",  movie_title:"The Wolf of Wall Street", name:"Martin Scorsese",value:2}
+        ];
+
+
+    var w = 300,                        
+        h = 300,                            
+        r = 100; 
+
+    var titles = d3.nest()
+        .key(function(d){ return d.movie_title; }).map(data)  //by nesting data, this allows me to count the # of movies    
+                                                              // and see length of array, which is # of times a movie title repeats                    
+
+    //var color = d3.scale.ordinal()
+      //  .range(colorbrewer.Set3[12]);
+
+    var color = d3.scale.ordinal()
+        .domain(["foo", "bar", "baz"])
+        .range(["#8E99CD","#F9C5DC","#F6F5C2", '#A8DCD8', '#FEC667', '#8AC09D', '#B1E3FA', '#F9B299', '#F0649C', '#D4ECE3', '#FDD7C6']);
+    
+    var svg = d3.select("#graphic_container")
+        .append("svg:svg")              
+        .data([data])                   
+            .attr("width", w)          
+            .attr("height", h)
+            .append("svg:g")                
+            .attr("transform", "translate(" + r + "," + r + ")");  
+
+    var arc = d3.svg.arc()              
+        .outerRadius(r);
+
+    var pie = d3.layout.pie()           
+        .value(function(d) { return d.value; });    //returns value in the array (which are all the same, except best pic) 
+
+    var arcs = svg.selectAll("g.slice")             //make my slices here 
+        .data(pie)                          
+        .enter()                            
+        .append("svg:g")
+            .attr("class", function(d) {return d.data.movie_title;});         
+        
+        arcs.append("svg:path")
+                .attr("fill", function(d) {  console.log(titles[d.data.movie_title].length); 
+                               if (titles[d.data.movie_title].length  > 1) 
+                                    {  return "none"}                           //switch fill to none for repeated titles
+                                     else {return color(d.data.movie_title);;}    
+                            ;})
+
+                .attr("stroke","#000")
+                .attr("stroke-width",0.2) 
+                .attr("d", arc);                                   
+        
+    </script>
+  </body>
+</html>
