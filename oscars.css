@@ -1,0 +1,50 @@
+body {
+  background: #ffffff;
+  color: #444444;
+  font-family: sans-serif;
+  line-height: 1.231;
+	font-family: Helvetica, sans-serif;
+  margin:0px;
+  padding:0px;
+}
+
+
+.svg-container {
+  width: 1200px;
+  margin-top: 20px;
+}
+
+#callout {
+  position: absolute;
+  top:5px;
+  left:510px;
+  width:175px;
+  text-align: center;
+}
+
+#callout2 {
+  position: absolute;
+  top:1500px;
+  left:615px;
+  width:175px;
+    font-size: 14px;
+  font-family: Helvetica;
+  text-align: center;
+}
+
+p.name {
+  font-size: 14px;
+  font-family: Helvetica;
+}
+
+.ital {
+  font-style: italic;
+}
+
+/* SVG */
+
+path.arrow, polyline.arrow {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
